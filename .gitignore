@@ -1,0 +1,16 @@
+# Ignore secrets folder
+secrets/
+
+# Ignore OAuth token
+token.json
+
+# Ignore Python cache and virtual environment
+__pycache__/
+venv/
+*.pyc
+
+# Ignore logs
+logs/
+
+test.fit
+test.mp4
