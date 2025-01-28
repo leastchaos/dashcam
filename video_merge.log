@@ -1,0 +1,20 @@
+2025-01-28 15:46:42,119 - INFO - main - Starting video merge process
+2025-01-28 15:46:59,999 - INFO - main - Starting video merge process
+2025-01-28 15:47:49,375 - INFO - main - Starting video merge process
+2025-01-28 15:48:03,364 - INFO - main - Starting video merge process
+2025-01-28 15:48:33,312 - INFO - main - Starting video merge process
+2025-01-28 15:48:33,417 - ERROR - extract_audio - Audio extraction failed
+Traceback (most recent call last):
+  File "c:\Python Projects\dashcam\src\process_video\sync_video.py", line 28, in extract_audio
+    subprocess.run(cmd, check=True, capture_output=True)
+  File "C:\Users\chanw\miniconda3\envs\dashcam\Lib\subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['ffmpeg', '-y', '-i', 'C:\\Video\\Output\\20250126_051428_C300.mp4', '-vn', '-ac', '1', '-ar', '44100', '-acodec', 'pcm_s16le', 'C:\\Users\\chanw\\AppData\\Local\\Temp\\tmp1ev1h7dh_1.wav']' returned non-zero exit status 4294967283.
+2025-01-28 15:49:12,931 - INFO - main - Starting video merge process
+2025-01-28 15:49:12,996 - ERROR - extract_audio - Audio extraction failed
+Traceback (most recent call last):
+  File "c:\Python Projects\dashcam\src\process_video\sync_video.py", line 28, in extract_audio
+    subprocess.run(cmd, check=True, capture_output=True)
+  File "C:\Users\chanw\miniconda3\envs\dashcam\Lib\subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['ffmpeg', '-y', '-i', 'C:/Video/Output/20250126_051428_C300.mp4', '-vn', '-ac', '1', '-ar', '44100', '-acodec', 'pcm_s16le', 'C:\\Users\\chanw\\AppData\\Local\\Temp\\tmppk8nsxdl_1.wav']' returned non-zero exit status 4294967283.
