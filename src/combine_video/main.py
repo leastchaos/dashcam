@@ -11,7 +11,7 @@ MAIN_VIDEO_FOLDER = Path("C:/Video/")
 INPUT_VIDEO_FOLDER_PATH = MAIN_VIDEO_FOLDER / "Input"
 OUTPUT_VIDEO_FOLDER_PATH = MAIN_VIDEO_FOLDER / "Output"
 ARCHIVE_VIDEO_FOLDER_PATH = MAIN_VIDEO_FOLDER / "Archive"
-
+UPLOADED_VIDEO_FOLDER_PATH = MAIN_VIDEO_FOLDER / "Uploaded"
 
 def main(
         tags: list[str],
@@ -53,27 +53,52 @@ def main(
                 logging.info(
                     "Skipping combining file and continuing with existing video."
                 )
+        archive_path = ARCHIVE_VIDEO_FOLDER_PATH / output_filename
+        move_all_files_in_folder(folder, archive_path)
+        logging.info(f"Files moved to {archive_path}")
+        # upload video
+        video_id = upload_video(
+            file_path=output_file_path,
+            title=output_filename,
+            description=video_datetime.split("_")[0],
+            tags=tags,
+            category_id=category_id,  # Sports category
+            privacy_status=privacy_status,
+            max_retries=max_upload_retries,
+        )
 
-        # # upload video
-        # video_id = upload_video(
-        #     file_path=output_file_path,
-        #     title=output_filename,
-        #     description=video_datetime.split("_")[0],
-        #     tags=tags,
-        #     category_id=category_id,  # Sports category
-        #     privacy_status=privacy_status,
-        #     max_retries=max_upload_retries,
-        # )
+        if not video_id:
+            logging.error("Video upload failed.")
+            continue
+            # move files to uploaded
+        uploaded_path = UPLOADED_VIDEO_FOLDER_PATH / output_filename
+        move_all_files_in_folder(output_file_path.parent, uploaded_path)
+        logging.info(f"Video uploaded with ID: {video_id}")
+        logging.info(f"Files moved to {uploaded_path}")
+            
+    # check for unuploaded videos
+    for file in OUTPUT_VIDEO_FOLDER_PATH.iterdir():
+        if file.is_file():
+            logging.warning(f"Video file not uploaded: {file}")
+            # upload video
+            video_id = upload_video(
+                file_path=output_file_path,
+                title=output_filename,
+                description=video_datetime.split("_")[0],
+                tags=tags,
+                category_id=category_id,  # Sports category
+                privacy_status=privacy_status,
+                max_retries=max_upload_retries,
+            )
 
-        # if video_id:
-        #     # move files
-        #     archive_path = ARCHIVE_VIDEO_FOLDER_PATH / output_filename
-        #     move_all_files_in_folder(folder, archive_path)
-        #     logging.info(f"Video uploaded with ID: {video_id}")
-        #     logging.info(f"Files moved to {archive_path}")
-        # else:
-        #     logging.error("Video upload failed.")
-
+            if not video_id:
+                logging.error("Video upload failed.")
+                return
+                # move files to uploaded
+            uploaded_path = UPLOADED_VIDEO_FOLDER_PATH / output_filename
+            move_all_files_in_folder(output_file_path.parent, uploaded_path)
+            logging.info(f"Video uploaded with ID: {video_id}")
+            logging.info(f"Files moved to {uploaded_path}")
 
 # Main function
 if __name__ == "__main__":

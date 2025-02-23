@@ -1,0 +1,34 @@
+2025-02-03 22:55:39,937 - __main__ - INFO - Starting download process for activity index 0
+2025-02-03 22:55:39,938 - __main__ - INFO - Attempting to authenticate using existing token store at cache\.garminconnect
+2025-02-03 22:55:43,461 - __main__ - INFO - Successfully authenticated using stored tokens
+2025-02-03 22:55:43,461 - __main__ - INFO - Fetching activities starting from index 0
+2025-02-03 22:55:43,722 - __main__ - INFO - Found activity ID: 18163977707
+2025-02-03 22:55:43,723 - __main__ - INFO - Downloading activity 18163977707 in ORIGINAL format
+2025-02-03 22:55:44,044 - __main__ - INFO - Extracting zip contents to C:\Python Projects\dashcam\18163977707
+2025-02-03 22:55:44,066 - __main__ - INFO - Moving FIT file to C:\Python Projects\dashcam\activity.fit
+2025-02-03 22:55:44,068 - __main__ - INFO - Successfully saved activity to activity.fit
+2025-02-03 23:17:51,106 - __main__ - INFO - Starting download process for activity index 0 in GPX format
+2025-02-03 23:17:51,106 - __main__ - INFO - Attempting to authenticate using existing token store at cache\.garminconnect
+2025-02-03 23:17:54,016 - __main__ - INFO - Successfully authenticated using stored tokens
+2025-02-03 23:17:54,017 - __main__ - INFO - Fetching activities starting from index 0
+2025-02-03 23:17:54,278 - __main__ - INFO - Found activity ID: 18163977707
+2025-02-03 23:17:54,278 - __main__ - INFO - Downloading activity 18163977707 in GPX format
+2025-02-03 23:19:23,593 - __main__ - INFO - Starting download process for activity index 0 in GPX format
+2025-02-03 23:19:23,593 - __main__ - INFO - Attempting to authenticate using existing token store at cache\.garminconnect
+2025-02-03 23:19:26,458 - __main__ - INFO - Successfully authenticated using stored tokens
+2025-02-03 23:19:26,458 - __main__ - INFO - Fetching activities starting from index 0
+2025-02-03 23:19:26,727 - __main__ - INFO - Found activity ID: 18163977707
+2025-02-03 23:19:26,727 - __main__ - INFO - Downloading activity 18163977707 in GPX format
+2025-02-03 23:19:34,819 - __main__ - INFO - Writing GPX file to C:\Python Projects\dashcam\activity.gpx
+2025-02-03 23:19:34,821 - __main__ - INFO - Successfully saved GPX file to activity.gpx
+2025-02-16 15:38:37,151 - __main__ - INFO - Starting download process for activity index 0 in GPX format
+2025-02-16 15:38:37,152 - __main__ - INFO - Attempting to authenticate using existing token store at cache\.garminconnect
+2025-02-16 15:38:40,448 - __main__ - INFO - Successfully authenticated using stored tokens
+2025-02-16 15:38:40,448 - __main__ - INFO - Fetching activities starting from index 0
+2025-02-16 15:38:40,728 - __main__ - INFO - Found activity ID: 18288254001
+2025-02-16 15:38:40,728 - __main__ - INFO - Downloading activity 18288254001 in GPX format
+2025-02-16 15:38:50,731 - urllib3.connectionpool - WARNING - Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ReadTimeoutError("HTTPSConnectionPool(host='connectapi.garmin.com', port=443): Read timed out. (read timeout=10)")': /download-service/export/gpx/activity/18288254001
+2025-02-16 15:39:02,010 - urllib3.connectionpool - WARNING - Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ReadTimeoutError("HTTPSConnectionPool(host='connectapi.garmin.com', port=443): Read timed out. (read timeout=10)")': /download-service/export/gpx/activity/18288254001
+2025-02-16 15:39:14,330 - urllib3.connectionpool - WARNING - Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ReadTimeoutError("HTTPSConnectionPool(host='connectapi.garmin.com', port=443): Read timed out. (read timeout=10)")': /download-service/export/gpx/activity/18288254001
+2025-02-16 15:39:24,641 - __main__ - INFO - Writing GPX file to C:\Python Projects\dashcam\activity.gpx
+2025-02-16 15:39:24,644 - __main__ - INFO - Successfully saved GPX file to activity.gpx

@@ -6,3 +6,9 @@ opencv-python
 moviepy
 ultralytics
 numpy
+librosa
+pillow
+requests
+garminconnect
+fitparse
+pandas

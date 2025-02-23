@@ -1,6 +1,6 @@
 # Ignore secrets folder
 secrets/
-
+cache/
 # Ignore OAuth token
 token.json
 
