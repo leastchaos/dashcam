@@ -108,43 +108,47 @@ def fmtdt(dt: datetime.datetime):
 
 
 def generate_args_list(
-    input=None,
-    output=None,
-    font="Roboto-Medium.ttf",
-    privacy=None,
-    generate="default",
-    overlay_size=None,
-    bg=(0, 0, 0, 0),
-    config_dir=default_config_location,
-    cache_dir=default_config_location,
-    profile=None,
-    double_buffer=False,
-    ffmpeg_dir=None,
-    load=None,
-    gpx=None,
-    gpx_merge=MergeMode.EXTEND,
-    use_gpx_only=False,
-    video_time_start=None,
-    video_time_end=None,
-    map_style="osm",
-    map_api_key=None,
-    layout="default",
-    layout_xml=None,
-    exclude=None,
-    include=None,
-    units_speed="mph",
-    units_altitude="metre",
-    units_distance="mile",
-    units_temperature="degC",
-    gps_dop_max=10,
-    gps_speed_max=60,
-    gps_speed_max_units="kph",
-    gps_bbox_lon_lat=None,
-    show_ffmpeg=False,
-    print_timings=False,
-    debug_metadata=False,
-    profiler=False,
-):
+    input: Optional[str | Path] = None,
+    output: Optional[str | Path] = "output_video.mp4",
+    font: Optional[str] = "arial",
+    privacy: Optional[str] = None,
+    generate: Optional[str] = None,
+    overlay_size: Optional[str] = "1920x1080",
+    bg: Optional[tuple[int, int, int, int]] = None,
+    config_dir: Optional[str | Path] = None,
+    cache_dir: Optional[str | Path] = None,
+    profile: Optional[str] = None,
+    double_buffer: bool = False,
+    ffmpeg_dir: Optional[str | Path] = None,
+    load: Optional[list[str]] = None,
+    gpx: Optional[str | Path] = None,
+    gpx_merge: Optional[str] = None,
+    use_gpx_only: bool = False,
+    use_fit_only: bool = True,
+    fit: Optional[str | Path] = Path("C:/Python Projects/dashcam/18404524116.fit"),
+    video_time_start: Optional[str] = None,
+    video_time_end: Optional[str] = None,
+    map_style: Optional[str] = None,
+    map_api_key: Optional[str] = None,
+    layout: Optional[str] = None,
+    layout_xml: Optional[str | Path] = Path(
+        "C:/Python Projects/dashcam/power-1920x1080.xml"
+    ),
+    exclude: Optional[list[str]] = None,
+    include: Optional[list[str]] = None,
+    units_speed: Optional[str] = "kph",
+    units_altitude: Optional[str] = "metre",
+    units_distance: Optional[str] = "km",
+    units_temperature: Optional[str] = "degC",
+    gps_dop_max: Optional[float] = 5,
+    gps_speed_max: Optional[float] = None,
+    gps_speed_max_units: Optional[str] = None,
+    gps_bbox_lon_lat: Optional[str] = None,
+    show_ffmpeg: bool = False,
+    print_timings: bool = False,
+    debug_metadata: bool = False,
+    profiler: bool = False,
+) -> list[str]:
     """
     Args:
         input (pathlib.Path, optional): Input MP4 file.
@@ -161,7 +165,8 @@ def generate_args_list(
         ffmpeg_dir (pathlib.Path, optional): Directory where ffmpeg/ffprobe located.
         load (list, optional): List of LoadFlag values.
         gpx (pathlib.Path, optional): Use GPX/FIT file.
-        gpx_merge (MergeMode, optional): GPX/FIT merge mode.
+        fit (pathlib.Path, optional): Use GPX/FIT file.
+        gpx_merge (str, optional): GPX/FIT merge mode.
         use_gpx_only (bool, optional): Use only GPX/FIT file.
         video_time_start (str, optional): Use file dates for aligning video start.
         video_time_end (str, optional): Use file dates for aligning video end.
@@ -194,20 +199,19 @@ def generate_args_list(
         args_list.append(str(input))
     if output is not None:
         args_list.append(str(output))
-
-    if font != "Roboto-Medium.ttf":
+    if font is not None:
         args_list.extend(["--font", str(font)])
     if privacy is not None:
         args_list.extend(["--privacy", str(privacy)])
-    if generate != "default":
+    if generate is not None:
         args_list.extend(["--generate", str(generate)])
     if overlay_size is not None:
         args_list.extend(["--overlay-size", str(overlay_size)])
-    if bg != (0, 0, 0, 0):
+    if bg is not None:
         args_list.extend(["--bg", ",".join(map(str, bg))])
-    if config_dir != default_config_location:
+    if config_dir is not None:
         args_list.extend(["--config-dir", str(config_dir)])
-    if cache_dir != default_config_location:
+    if cache_dir is not None:
         args_list.extend(["--cache-dir", str(cache_dir)])
     if profile is not None:
         args_list.extend(["--profile", str(profile)])
@@ -219,19 +223,23 @@ def generate_args_list(
         args_list.extend(["--load"] + [str(item) for item in load])
     if gpx is not None:
         args_list.extend(["--gpx", str(gpx)])
-    if gpx_merge != MergeMode.EXTEND:
-        args_list.extend(["--gpx-merge", str(gpx_merge.value)])
+    if gpx_merge is not None:
+        args_list.extend(["--gpx-merge", str(gpx_merge)])
     if use_gpx_only:
         args_list.append("--use-gpx-only")
+    if use_fit_only:
+        args_list.append("--use-fit-only")
+    if fit is not None:
+        args_list.extend(["--fit", str(fit)])
     if video_time_start is not None:
         args_list.extend(["--video-time-start", str(video_time_start)])
     if video_time_end is not None:
         args_list.extend(["--video-time-end", str(video_time_end)])
-    if map_style != "osm":
+    if map_style is not None:
         args_list.extend(["--map-style", str(map_style)])
     if map_api_key is not None:
         args_list.extend(["--map-api-key", str(map_api_key)])
-    if layout != "default":
+    if layout is not None:
         args_list.extend(["--layout", str(layout)])
     if layout_xml is not None:
         args_list.extend(["--layout-xml", str(layout_xml)])
@@ -239,19 +247,19 @@ def generate_args_list(
         args_list.extend(["--exclude"] + [str(item) for item in exclude])
     if include is not None:
         args_list.extend(["--include"] + [str(item) for item in include])
-    if units_speed != "mph":
+    if units_speed is not None:
         args_list.extend(["--units-speed", str(units_speed)])
-    if units_altitude != "metre":
+    if units_altitude is not None:
         args_list.extend(["--units-altitude", str(units_altitude)])
-    if units_distance != "mile":
+    if units_distance is not None:
         args_list.extend(["--units-distance", str(units_distance)])
-    if units_temperature != "degC":
+    if units_temperature is not None:
         args_list.extend(["--units-temperature", str(units_temperature)])
-    if gps_dop_max != 10:
+    if gps_dop_max is not None:
         args_list.extend(["--gps-dop-max", str(gps_dop_max)])
-    if gps_speed_max != 60:
+    if gps_speed_max is not None:
         args_list.extend(["--gps-speed-max", str(gps_speed_max)])
-    if gps_speed_max_units != "kph":
+    if gps_speed_max_units is not None:
         args_list.extend(["--gps-speed-max-units", str(gps_speed_max_units)])
     if gps_bbox_lon_lat is not None:
         args_list.extend(["--gps-bbox-lon-lat", str(gps_bbox_lon_lat)])
@@ -267,63 +275,26 @@ def generate_args_list(
     return args_list
 
 
-if __name__ == "__main__":
+def generate_dashboard(
+    output: Optional[str | Path] = "output_video.mp4",
+    fit: Optional[str | Path] = Path("C:/Python Projects/dashcam/18404524116.fit"),
+    font: Optional[str] = "arial",
+    overlay_size: Optional[str] = "1920x1080",
+    layout_xml: Optional[str | Path] = Path(
+        "C:/Python Projects/dashcam/power-1920x1080.xml"
+    ),
+) -> None:
+    """Generate the dashboard."""
     # Define the arguments as a list
-    args_list = [
-        # "input_video.mp4",  # Input MP4 file
-        "output_video.mp4",  # Output video file
-        "--font",
-        "arial",  # Select a font
-        # "--privacy", "37.7749,-122.4194,10",  # Set privacy zone
-        # "--generate", "overlay",  # Type of output to generate
-        "--overlay-size",
-        "1920x1080",  # Force size of overlay
-        # "--bg", "255,255,255,255",  # Background colour
-        # "--config-dir", "/path/to/config",  # Location of config files
-        # "--cache-dir", "/path/to/cache",  # Location of caches
-        # "--profile", "fast",  # Use ffmpeg options profile
-        # "--double-buffer",  # Enable double buffering mode
-        # "--ffmpeg-dir", "/path/to/ffmpeg",  # Directory where ffmpeg/ffprobe located
-        # "--load", "gps", "alt",  # Load data from GoPro
-        "--fit",
-        "C:/Python Projects/dashcam/activity.fit",  # Use GPX/FIT file
-        # "--gpx-merge", "EXTEND",  # Merge mode for GPX/FIT file
-        "--use-fit-only",  # Use only the GPX/FIT file
-        # "--video-time-start", "file-created",  # Use file dates for aligning video and GPS information
-        # "--video-time-end", "file-modified",  # Use file dates for aligning video and GPS information
-        # "--map-style", "osm",  # Style of map to render
-        # "--map-api-key", "your_api_key",  # API Key for map provider
-        # "--layout", "default",  # Choose graphics layout
-        "--layout-xml",
-        "C:/Python Projects/dashcam/power-1920x1080.xml",  # Use XML File for layout
-        # "--exclude", "component1", "component2",  # Exclude named components
-        # "--include", "component3", "component4",  # Include named components
-        "--units-speed",
-        "kph",  # Default unit for speed
-        "--units-altitude",
-        "metre",  # Default unit for altitude
-        "--units-distance",
-        "km",  # Default unit for distance
-        "--units-temperature",
-        "degC",  # Default unit for temperature
-        "--gps-dop-max",
-        "5",  # Max DOP for GPS
-        # "--gps-speed-max", "50",  # Max GPS speed
-        "--gps-speed-max-units",
-        "kph",  # Units for --gps-speed-max
-        # "--gps-bbox-lon-lat", "10,20,30,40",  # Define GPS Bounding Box
-        # "--show-ffmpeg",  # Show FFMPEG output
-        # "--print-timings",  # Print timings
-        # "--debug-metadata",  # Show detailed information when parsing GoPro Metadata
-        "--profiler",  # Do some basic profiling of the widgets
-    ]
-
+    args_list = generate_args_list(
+        output=output,
+        fit=fit,
+        font=font,
+        overlay_size=overlay_size,
+        layout_xml=layout_xml,
+    )
     # Call the function with the arguments
     args = gopro_dashboard_arguments(args_list)
-
-    # Now you can use the args object in your script
-    print(args.input)  # Access the input file path
-    print(args.output)  # Access the output file path
 
     try:
         version = metadata.version("gopro_overlay")
@@ -691,3 +662,7 @@ if __name__ == "__main__":
 
     except KeyboardInterrupt:
         log("User interrupted...")
+
+
+if __name__ == "__main__":
+    generate_dashboard()
