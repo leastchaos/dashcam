@@ -1,3 +1,4 @@
+import logging
 from pathlib import Path
 import shutil
 
@@ -10,6 +11,7 @@ def move_all_files_in_folder(input_folder: Path, output_folder: Path) -> None:
         input_folder: Source directory containing files to move
         output_folder: Target directory for moved files
     """
+    logging.info(f"Moving files from {input_folder} to {output_folder}")
     # Create output directory if it doesn't exist
     output_folder.mkdir(parents=True, exist_ok=True)
     
@@ -34,7 +36,7 @@ def move_all_files_in_folder(input_folder: Path, output_folder: Path) -> None:
         
         # Perform the move
         shutil.move(str(src_path), str(dest_path))
-        print(f"Moved '{src_path.name}' to '{dest_path.relative_to(output_folder.parent)}'")
+        logging.info(f"Moved '{src_path.name}' to '{dest_path.relative_to(output_folder.parent)}'")
 
 if __name__ == "__main__":
     input_folder = Path("C:/Video/OA4")

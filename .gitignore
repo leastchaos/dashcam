@@ -14,3 +14,6 @@ logs/
 
 test.fit
 test.mp4
+
+*.log
+*.fit
