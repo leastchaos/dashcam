@@ -11,6 +11,7 @@ venv/
 
 # Ignore logs
 logs/
+outputs/
 
 test.fit
 test.mp4
@@ -18,3 +19,4 @@ test.mp4
 *.log
 *.fit
 *.mp4
+*.wav

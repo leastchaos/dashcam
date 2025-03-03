@@ -108,7 +108,7 @@ def download_latest_activity(
     output_filename: str = None,
     start_index: int = 0,
     format: ActivityFormat = ActivityFormat.FIT,
-) -> bytes:
+) -> Path:
     """Download activity from Garmin Connect."""
 
     logger.info(
@@ -123,15 +123,19 @@ def download_latest_activity(
 
     try:
         activities = client.get_activities(start_index, 1)
+        print(activities)
         if not activities:
             logger.error(f"No activities found at index {start_index}")
             raise ValueError(f"No activities found at index {start_index}")
 
         activity_id = activities[0]["activityId"]
         logger.info(f"Found activity ID: {activity_id}")
-
+        start_time_local: str = activities[0]["startTimeLocal"]
+        logger.info(f"Activity start time: {start_time_local}")
+        # convert start_time_local suitable for filename
+        start_time_local = start_time_local.replace(":", "-")
         if not output_filename:
-            output_filename = str(activity_id)
+            output_filename = str(start_time_local)
 
         output_filepath = Path(
             output_folder, f"{output_filename}.{format.value.lower()}"
@@ -154,7 +158,7 @@ def download_latest_activity(
         raise
 
 
-def _download_fit_activity(client, activity_id, output_filepath: Path) -> bytes:
+def _download_fit_activity(client, activity_id, output_filepath: Path) -> Path:
     """Download, extract, and save a FIT activity."""
     zip_path = Path(f"{activity_id}.zip")
     extract_dir = Path(f"{activity_id}")
@@ -179,14 +183,14 @@ def _download_fit_activity(client, activity_id, output_filepath: Path) -> bytes:
         shutil.move(str(fit_file), str(output_filepath))
         logger.info(f"Successfully saved activity to {output_filepath.resolve()}")
 
-        return fit_data
+        return output_filepath
 
     finally:
         zip_path.unlink(missing_ok=True)
         shutil.rmtree(extract_dir, ignore_errors=True)
 
 
-def _download_gpx_activity(client, activity_id, output_filepath: Path) -> bytes:
+def _download_gpx_activity(client, activity_id, output_filepath: Path) -> Path:
     """Download and save a GPX activity."""
     logger.info(f"Downloading activity {activity_id} in GPX format")
     gpx_data = client.download_activity(
@@ -196,7 +200,7 @@ def _download_gpx_activity(client, activity_id, output_filepath: Path) -> bytes:
     output_filepath.write_bytes(gpx_data)
     logger.info(f"Successfully saved GPX file to {output_filepath.resolve()}")
 
-    return gpx_data
+    return output_filepath
 
 
 if __name__ == "__main__":
