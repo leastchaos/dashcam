@@ -8,7 +8,7 @@ from typing import Literal
 from combine_clips import combine_clips
 from get_video_recording_time import get_first_video_recording_time
 from upload_video import upload_video
-from move_files import move_all_files_in_folder
+from move_files import find_dji_action4_drive, find_fly6pro_drive, move_all_files_in_folder
 
 MAIN_VIDEO_FOLDER = Path("C:/Video/")
 INPUT_VIDEO_FOLDER_PATH = MAIN_VIDEO_FOLDER / "Input"
@@ -143,6 +143,12 @@ async def main(
 
 
 if __name__ == "__main__":
+    fly6pro_drive = find_fly6pro_drive()
+    dji_action4_drive = find_dji_action4_drive()
+    if fly6pro_drive:
+        move_all_files_in_folder(fly6pro_drive, INPUT_VIDEO_FOLDER_PATH / "FLY6PRO")
+    if dji_action4_drive:
+        move_all_files_in_folder(dji_action4_drive, INPUT_VIDEO_FOLDER_PATH / "DJI_ACTION4")
     logging.basicConfig(level=logging.INFO)
     asyncio.run(
         main(

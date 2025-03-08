@@ -136,6 +136,9 @@ def generate_args_list(
     ),
     exclude: Optional[list[str]] = None,
     include: Optional[list[str]] = None,
+    start: Optional[str] = None,
+    end: Optional[str] = None,
+    duration: Optional[str] = None,
     units_speed: Optional[str] = "kph",
     units_altitude: Optional[str] = "metre",
     units_distance: Optional[str] = "km",
@@ -205,6 +208,12 @@ def generate_args_list(
         args_list.extend(["--privacy", str(privacy)])
     if generate is not None:
         args_list.extend(["--generate", str(generate)])
+    if start is not None:
+        args_list.extend(["--start", str(start)])
+    if end is not None:
+        args_list.extend(["--end", str(end)])
+    if duration is not None:
+        args_list.extend(["--duration", str(duration)])
     if overlay_size is not None:
         args_list.extend(["--overlay-size", str(overlay_size)])
     if bg is not None:
@@ -284,6 +293,7 @@ def generate_dashboard(
         "C:/Python Projects/dashcam/power-1920x1080.xml"
     ),
     privacy: Optional[str] = "1.442770, 103.808006, 2", # (lat, long, km)
+    **kwargs
     
 
 ) -> None:
@@ -295,7 +305,8 @@ def generate_dashboard(
         font=font,
         overlay_size=overlay_size,
         layout_xml=layout_xml,
-        privacy=privacy
+        privacy=privacy,
+        **kwargs
     )
     # Call the function with the arguments
     args = gopro_dashboard_arguments(args_list)

@@ -1,5 +1,6 @@
 import asyncio
 from pathlib import Path
+import ssl
 from typing import Literal
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
@@ -122,6 +123,15 @@ async def upload_video(
                         )
                         continue
                     raise
+                except ssl.SSLEOFError as e: #Add this block.
+                    retry_count += 1
+                    if retry_count <= max_retries:
+                        logging.warning(f"SSL Error (retry {retry_count}/{max_retries}): {e}")
+                        await asyncio.sleep(2**retry_count) #exponential backoff.
+                        continue
+                    else:
+                        logging.error(f"SSL Error: Max retries exceeded. Upload failed. {e}")
+                        return None
 
         if previous_percent < 100:
             pbar.update(100 - previous_percent)

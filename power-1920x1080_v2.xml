@@ -1,0 +1,85 @@
+<layout>
+    <!-- Top Bar -->
+    <composite x="16" y="24" name="date_and_time">
+        <component type="datetime" x="0" y="0" format="%Y/%m/%d" size="18" align="left" font="bold"/>
+        <component type="datetime" x="0" y="32" format="%H:%M:%S" size="42" align="left" font="bold"/>
+    </composite>
+
+    <!-- GPS Status Group -->
+    <composite x="1644" y="24" name="gps_info" spacing="8">
+        <frame name="gps-lock" width="48" height="48" bg="0,0,0,160" cr="8" opacity="0.6">
+            <component type="gps-lock-icon" size="32"/>
+        </frame>
+        
+        <composite spacing="4">
+            <component type="text" size="18" font="bold" color="#4CAF50">POSITION</component>
+            <grid columns="2" column_gap="16">
+                <component type="text" size="16">Latitude:</component>
+                <component type="metric" metric="lat" dp="6" size="16" align="right"/>
+                <component type="text" size="16">Longitude:</component>
+                <component type="metric" metric="lon" dp="6" size="16" align="right"/>
+            </grid>
+        </composite>
+    </composite>
+
+    <!-- Central Speed Display -->
+    <composite x="640" y="360" name="speed_display" center="true">
+        <component type="metric" metric="speed" units="speed" dp="0" size="160" font="bold"/>
+        <component type="metric_unit" metric="speed" units="speed" size="24" y="-40">{:~c}</component>
+    </composite>
+
+    <!-- Data Cluster Left -->
+    <grid x="32" y="980" columns="2" column_gap="64">
+        <composite name="altitude" spacing="8">
+            <component type="icon" file="mountain.png" size="48"/>
+            <component type="text" size="18" font="bold">ELEVATION</component>
+            <component type="metric" metric="alt" units="alt" dp="1" size="36"/>
+        </composite>
+
+        <composite name="gradient" spacing="8">
+            <component type="icon" file="slope-triangle.png" size="48"/>
+            <component type="text" size="18" font="bold">GRADIENT</component>
+            <component type="metric" metric="gradient" dp="1" size="36" suffix="%"/>
+        </composite>
+    </grid>
+
+    <!-- Right Side Metrics -->
+    <grid x="1740" y="800" rows="3" row_gap="48">
+        <composite name="cadence" spacing="12" align="right">
+            <component type="icon" file="gauge.png" size="48" align="right"/>
+            <component type="text" size="18" font="bold">CADENCE</component>
+            <component type="metric" metric="cadence" dp="0" size="42" suffix="RPM"/>
+        </composite>
+
+        <composite name="heartbeat" spacing="12" align="right">
+            <component type="icon" file="heartbeat.png" size="48" align="right"/>
+            <component type="text" size="18" font="bold">HEART RATE</component>
+            <component type="metric" metric="hr" dp="0" size="42" suffix="BPM"/>
+            <translate x="-930">
+                <component type="zone-bar" width="800" height="24" metric="hr" 
+                         max="200" z1="130" z2="163" z3="183"
+                         colors="#348AEB,#43EB34,#F0E813,#CF1302" opacity="0.9"/>
+            </translate>
+        </composite>
+
+        <composite name="power" spacing="12" align="right">
+            <component type="icon" file="power.png" size="48" align="right"/>
+            <component type="text" size="18" font="bold">POWER</component>
+            <component type="metric" metric="power" dp="0" size="42" suffix="W"/>
+            <translate x="-930">
+                <component type="zone-bar" width="800" height="24" metric="power"
+                         max="600" z1="130" z2="160" z3="200"
+                         colors="#43EB34,#43EB34,#F0E813,#CF1302" opacity="0.9"/>
+            </translate>
+        </composite>
+    </grid>
+
+    <!-- Visualization Section -->
+    <component type="gradient_chart" name="gradient_chart" x="400" y="900" width="1200" height="240"/>
+    
+    <!-- Map Cluster -->
+    <stack x="1644" y="100" spacing="24">
+        <component type="moving_map" size="320" zoom="16" corner_radius="24" elevation="4"/>
+        <component type="journey_map" size="320" corner_radius="24" elevation="4"/>
+    </stack>
+</layout>

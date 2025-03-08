@@ -1,7 +1,7 @@
 <layout>
     <composite x="16" y="30" name="date_and_time">
         <component type="datetime" x="0" y="0" format="%Y/%m/%d" size="16" align="left"/>
-        <component type="datetime" x="0" y="24" format="%H:%M:%S" truncate="5" size="32" align="left"/>
+        <component type="datetime" x="0" y="24" format="%H:%M:%S" size="32" align="left"/>
     </composite>
 
     <composite x="1644" y="0" name="gps_info">
