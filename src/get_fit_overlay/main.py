@@ -18,7 +18,7 @@ if __name__ == "__main__":
     )
     os.makedirs(FIT_FOLDER, exist_ok=True)
     os.makedirs(OVERLAY_FOLDER, exist_ok=True)
-    latest_fit_file = download_latest_activity(output_folder=FIT_FOLDER, start_index=31)
+    latest_fit_file = download_latest_activity(output_folder=FIT_FOLDER, start_index=0)
     output_overlay_file = OVERLAY_FOLDER / latest_fit_file.with_suffix(".mp4")
     generate_dashboard(
         fit=latest_fit_file,

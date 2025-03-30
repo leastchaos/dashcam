@@ -53,6 +53,8 @@ def move_all_files_in_folder(
         logging.info(
             f"Moved '{src_path.name}' to '{dest_path.relative_to(output_folder.parent)}'"
         )
+
+
 def find_fly6pro_drive() -> Optional[str]:
     """Finds the drive letter of the FLY6PRO device."""
     if platform.system() == "Windows":
@@ -79,7 +81,9 @@ def find_fly6pro_drive() -> Optional[str]:
                     logging.info(f"FLY6PRO mount point found: {mount_point}")
                     return mount_point
         except FileNotFoundError:
-            logging.error("Linux mount point detection failed - /proc/mounts not found.")
+            logging.error(
+                "Linux mount point detection failed - /proc/mounts not found."
+            )
     return None
 
 
@@ -88,7 +92,9 @@ def find_dji_action4_drive() -> Optional[str]:
     if platform.system() == "Windows":
         for drive in "ABCDEFGHIJKLMNOPQRSTUVWXYZ":
             drive_path = f"{drive}:\\"
-            if os.path.exists(drive_path) and os.path.exists(os.path.join(drive_path, "DCIM", "DJI_001")):
+            if os.path.exists(drive_path) and os.path.exists(
+                os.path.join(drive_path, "DCIM", "DJI_001")
+            ):
                 logging.info(f"DJI Action 4 drive found: {drive_path}")
                 return drive_path
     elif platform.system() == "Darwin":
@@ -107,8 +113,11 @@ def find_dji_action4_drive() -> Optional[str]:
                     logging.info(f"DJI Action 4 mount point found: {mount_point}")
                     return mount_point
         except FileNotFoundError:
-            logging.error("Linux mount point detection failed - /proc/mounts not found.")
+            logging.error(
+                "Linux mount point detection failed - /proc/mounts not found."
+            )
     return None
+
 
 if __name__ == "__main__":
     fly6pro_drive = find_fly6pro_drive()
@@ -118,4 +127,3 @@ if __name__ == "__main__":
         move_all_files_in_folder(fly6pro_drive, MAIN_FOLDER / "FLY6PRO")
     if dji_action4_drive:
         move_all_files_in_folder(dji_action4_drive, MAIN_FOLDER / "DJI_ACTION4")
-
