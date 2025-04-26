@@ -141,18 +141,36 @@ async def main(
     await asyncio.gather(*upload_tasks)
     await check_unuploaded_videos(tags, category_id, privacy_status, max_upload_retries)
 
-
-if __name__ == "__main__":
+async def initialize_drives():
+    """Concurrently move files from detected drives to input folders."""
     fly6pro_drive = find_fly6pro_drive()
     dji_action4_drive = find_dji_action4_drive()
+    
+    tasks = []
     if fly6pro_drive:
-        move_all_files_in_folder(fly6pro_drive, INPUT_VIDEO_FOLDER_PATH / "FLY6PRO")
+        tasks.append(
+            asyncio.to_thread(
+                move_all_files_in_folder,
+                fly6pro_drive,
+                INPUT_VIDEO_FOLDER_PATH / "FLY6PRO"
+            )
+        )
     if dji_action4_drive:
-        move_all_files_in_folder(dji_action4_drive, INPUT_VIDEO_FOLDER_PATH / "DJI_ACTION4")
+        tasks.append(
+            asyncio.to_thread(
+                move_all_files_in_folder,
+                dji_action4_drive,
+                INPUT_VIDEO_FOLDER_PATH / "DJI_ACTION4"
+            )
+        )
+    await asyncio.gather(*tasks)
+if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
+    # Run initialization and main sequentially in the event loop
+    asyncio.run(initialize_drives())
     asyncio.run(
         main(
-            tags=["test"],
+            tags=["cycling", "ride", "singapore"],
             category_id=17,
             privacy_status="private",
             max_upload_retries=3,
