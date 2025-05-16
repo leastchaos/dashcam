@@ -9,13 +9,13 @@ from tqdm import tqdm
 def get_duration(file_path: Path) -> float:
     """
     Returns the duration of a video file using FFprobe.
-    
+
     Args:
         file_path: Path to the video file
-        
+
     Returns:
         Duration in seconds as a float
-        
+
     Raises:
         subprocess.CalledProcessError: If FFprobe command fails
     """
@@ -40,14 +40,14 @@ def get_duration(file_path: Path) -> float:
 def parse_time(time_str: str) -> float:
     """
     Converts FFmpeg time string (hh:mm:ss.ms) to seconds.
-    
+
     Args:
         time_str: Time string in FFmpeg format
-        
+
     Returns:
         Total time in seconds as a float
     """
-    hours, minutes, seconds = map(float, time_str.split(':'))
+    hours, minutes, seconds = map(float, time_str.split(":"))
     return hours * 3600 + minutes * 60 + seconds
 
 
@@ -88,8 +88,21 @@ def combine_clips(
 
     # Calculate total duration of all input files
     total_duration = 0.0
+    invalid_files = []
     for file in input_files:
-        total_duration += get_duration(file)
+        try:
+            total_duration += get_duration(file)
+        except ValueError as e:
+            logging.error(f"Error getting duration for {file}: {e}")
+            invalid_files.append(file)
+
+    if invalid_files:
+        logging.warning(f"Invalid files found: {invalid_files}")
+    # Remove invalid files from list
+    input_files = [file for file in input_files if file not in invalid_files]
+
+    if not input_files:
+        raise ValueError(f"No valid {file_type} files found in {input_folder}")
 
     concat_list = input_folder / (output_file_path.stem + "concat.txt")
     progress_bar = None
@@ -107,7 +120,7 @@ def combine_clips(
             total=round(total_duration, 2),
             unit="s",
             desc="Combining clips",
-            bar_format='{l_bar}{bar}| {n:.2f}/{total:.2f}s [{elapsed}<{remaining}, {rate_fmt}{postfix}]'
+            bar_format="{l_bar}{bar}| {n:.2f}/{total:.2f}s [{elapsed}<{remaining}, {rate_fmt}{postfix}]",
         )
         # Run FFmpeg process
         process = subprocess.Popen(
@@ -130,15 +143,15 @@ def combine_clips(
             stdout=subprocess.DEVNULL,
             text=True,
             bufsize=1,
-            encoding='utf-8',
-            errors='replace'
+            encoding="utf-8",
+            errors="replace",
         )
 
         stderr_lines = []
         for line in process.stderr:
             line = line.strip()
             stderr_lines.append(line)
-            
+
             # Update progress from time markers
             time_match = re.search(r"time=(\d+:\d+:\d+\.\d+)", line)
             if time_match:
@@ -149,11 +162,9 @@ def combine_clips(
         progress_bar.close()
 
         if process.returncode != 0:
-            error_output = '\n'.join(stderr_lines)
+            error_output = "\n".join(stderr_lines)
             raise subprocess.CalledProcessError(
-                process.returncode,
-                process.args,
-                stderr=error_output
+                process.returncode, process.args, stderr=error_output
             )
 
     except subprocess.CalledProcessError as e:
@@ -170,4 +181,3 @@ if __name__ == "__main__":
     input_folder = Path("C:/Video/Input/OA4")
     output_file_path = Path("C:/Video/combined_video")
     combine_clips(input_folder, output_file_path)
-    

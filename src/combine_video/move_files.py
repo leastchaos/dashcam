@@ -28,6 +28,13 @@ def move_all_files_in_folder(
 
     for root, _, files in os.walk(input_folder):
         for file in files:
+            # if file name starts with LKM, skip it
+            if file.startswith("LKM"):
+                continue
+            if file.lower().endswith(tuple(".lrf")):
+                # delete it
+                src_path = Path(root) / file
+                src_path.unlink()
             if file.lower().endswith(tuple(extensions)):
                 src_path = Path(root) / file
                 files_to_move.append(src_path)
